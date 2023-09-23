@@ -14,6 +14,6 @@ namespace sm
 
     void printSomething()
     {
-        std::cout << "ololo, " << someString << std::endl;
+        std::cout << "adasdasasdsa, " << someString << std::endl;
     }
 }

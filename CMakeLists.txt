@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project("some-application"
-    VERSION 0.9.1
-    DESCRIPTION "A project with nested library"
-)
+project("ip-filter" VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,4 +14,4 @@ target_sources(${PROJECT_NAME}
         main.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE SomeLibrary)
+target_link_libraries(${PROJECT_NAME} PRIVATE IpFilter)
