@@ -1,7 +1,9 @@
-#include <iostream>
-#include <some.h>
+#include <set>
+#include <io.h>
 
 int main(int, char**) {
-    std::cout << "base application message" << std::endl;
-    sm::printSomething();
+    filter::IO io(filter::inputType::file); 
+    std::multiset<filter::IPv4, std::greater<filter::IPv4>> addresses;
+    io.in(addresses);
+    io.out(addresses);
 }

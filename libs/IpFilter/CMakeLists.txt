@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.21)
 
 project("IpFilter" VERSION 0.0.1)
 
@@ -9,7 +9,8 @@ add_library(${PROJECT_NAME} STATIC)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/some.cpp
+        src/io.cpp
+        src/ipv4.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -25,14 +26,16 @@ target_include_directories(${PROJECT_NAME}
 
 # without it public headers won't get installed
 set(PUBLIC_HEADERS
-    include/some.h
+    include/io.h
+    include/ipv4.h
 )
 
-# not for MSVC
 if(CMAKE_COMPILER_IS_GNUCXX)
     # compile options for this target only
     target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
+
+file(COPY_FILE resources/ip_filter.tsv ${CMAKE_BINARY_DIR}/ip_filter.tsv)
 
 # where to find our CMake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

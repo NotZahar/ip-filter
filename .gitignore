@@ -1,4 +1,5 @@
 build/
-.vscode/
 install/
 template/
+.vscode/
+.cache/
