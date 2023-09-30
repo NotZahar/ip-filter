@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <set>
+#include <map>
 
 #include "ipv4.h"
 
@@ -19,6 +20,9 @@ namespace filter {
 
     class IO {
     public:
+        using bytePosition = int;
+        using byteValue = int;
+
         IO() = delete;
         explicit IO(inputType type, const std::optional<std::filesystem::path>& filePath = {});
 
@@ -58,24 +62,60 @@ namespace filter {
         }
 
         template <class Compare = std::less<IPv4>>
-        void out(const std::multiset<IPv4, Compare>& addresses) {
+        void out(const std::multiset<IPv4, Compare>& addresses) const {
             for (const auto& address : addresses) {
                 auto addr = address.getAddress();
-                std::cout << addr[0] << '.' << addr[1] << '.' << addr[2] << '.' << addr[3] << '\n';
+                outAddress(addr);
             }
         }
 
-        // template <class Compare = std::less<IPv4>> // TODO: [here] add condition
-        // void out(const std::multiset<IPv4, Compare>& addresses) {
-        //     for (const auto& address : addresses) {
-        //         auto addr = address.getAddress();
-        //         std::cout << addr[0] << '.' << addr[1] << '.' << addr[2] << '.' << addr[3] << '\n';
-        //     }
-        // }
+        template <class Compare = std::less<IPv4>>
+        void out(const std::multiset<IPv4, Compare>& addresses, byteValue value) const {
+            for (const auto& address : addresses) {
+                auto addr = address.getAddress();
+                
+                if (!bytePositionIsValid(value)) 
+                    return;
+
+                if (addr[0] == value 
+                    || addr[1] == value
+                    || addr[2] == value
+                    || addr[3] == value)
+                    outAddress(addr);
+            }
+        }
+
+        template <class Compare = std::less<IPv4>>
+        void out(const std::multiset<IPv4, Compare>& addresses, 
+                const std::map<bytePosition, byteValue>& searchBytes) const {
+            const std::size_t searchBytesSize = searchBytes.size();
+            
+            if (searchBytesSize < 1 || searchBytesSize > 4) 
+                return;
+
+            for (const auto& address : addresses) {
+                auto addr = address.getAddress();
+
+                std::size_t needToOut = 0;
+                for (const auto& searchByte : searchBytes) {
+                    if (!bytePositionIsValid(searchByte.first)) 
+                        return;
+                    if (addr[searchByte.first - 1] == searchByte.second)
+                        needToOut += 1;
+                }
+
+                if (searchBytesSize == needToOut) 
+                    outAddress(addr);
+            }
+        }
 
         std::optional<std::filesystem::path> getFilePath() const;
 
         friend std::ostream& operator<<(std::ostream& stream, const IO& io);
+
+    private:
+        bool bytePositionIsValid(bytePosition pos) const;
+        void outAddress(const std::vector<int>& addr) const;
 
     private:
         const inputType _type;

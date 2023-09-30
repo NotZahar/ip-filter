@@ -5,9 +5,13 @@
 #include <array>
 
 namespace filter {
-    IPv4::IPv4(int p1, int p2, int p3, int p4) 
-        : _address({p1, p2, p3, p4}) 
-    {}
+    IPv4::IPv4(int p1, int p2, int p3, int p4) {
+        _address.reserve(4);
+        _address.push_back(p1);
+        _address.push_back(p2);
+        _address.push_back(p3);
+        _address.push_back(p4);
+    }
 
     std::optional<IPv4> IPv4::toIPv4(const std::string& str) {
         int startIndex = 0; 
@@ -24,6 +28,7 @@ namespace filter {
             try {
                 int p = std::stoi(temp);
                 if (p < 0 || p > 255) return {};
+                if (addressPos > 3) return {};
                 address[addressPos] = p;
                 ++addressPos;
             } catch(const std::exception&) {
