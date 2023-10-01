@@ -4,7 +4,7 @@
 #include <io.h>
 
 TEST(IpFilter, md5sum_check_linux) {
-    std::system("cat ip_filter.tsv | ./ip_filter | md5sum > ip_filter_md5sum_check_l.txt");
+    [[nodiscard]] std::system("cat ip_filter.tsv | ./ip_filter | md5sum > ip_filter_md5sum_check_l.txt");
     std::ifstream istream;
     std::string checkLine;
 
