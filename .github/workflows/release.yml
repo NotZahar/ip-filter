@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt update && sudo apt install cmake libgtest-dev
-      - run: cmake -DCMAKE_BUILD_TYPE=Release .
+      - run: cmake -DCMAKE_BUILD_TYPE=Release -DPATCH_VERSION=${{ github.run_number }} .
       - run: cmake --build . --target install
       - run: cmake --build . --target test
       - run: cmake --build . --target package
@@ -34,6 +34,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ip_filter-0.0.${{ github.run_number }}.deb
-          asset_name: ip_filter-0.0.${{ github.run_number }}.deb
+          asset_path: ./ip_filter-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: ip_filter-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project("ip_filter" VERSION 0.0.1)
+project("ip_filter")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
