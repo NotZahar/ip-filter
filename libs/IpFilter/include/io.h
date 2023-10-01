@@ -35,29 +35,45 @@ namespace filter {
         template <class Compare = std::less<IPv4>>
         void in(std::multiset<IPv4, Compare>& addresses) {
             switch (_type) {
-            case inputType::invalid:
-                return;
-            case inputType::standard:
-                return;
-            case inputType::file:
-                std::ifstream istream;
-                std::string line;
+                case inputType::invalid: {
+                    return;
+                } 
+                case inputType::standard: {
+                    std::string line;
 
-                istream.open(*_filePath);
-                if (!istream.is_open()) return;
+                    while (std::getline(std::cin, line)) {
+                        std::size_t tabPos = line.find('\t');
 
-                while (!istream.eof()) {
-                    std::getline(istream, line);
-                    std::size_t tabPos = line.find('\t');
+                        if (tabPos == std::string::npos)
+                            continue;
 
-                    if (tabPos == std::string::npos)
-                        continue;
+                        auto ipv4 = IPv4::toIPv4(line.substr(0, tabPos));
+                        if (ipv4) addresses.insert(*ipv4);
+                    }
 
-                    auto ipv4 = IPv4::toIPv4(line.substr(0, tabPos));
-                    if (ipv4) addresses.insert(*ipv4);
+                    return;
+                } 
+                case inputType::file: {
+                    std::ifstream istream;
+                    std::string line;
+
+                    istream.open(*_filePath);
+                    if (!istream.is_open()) 
+                        return;
+
+                    while (!istream.eof()) {
+                        std::getline(istream, line);
+                        std::size_t tabPos = line.find('\t');
+
+                        if (tabPos == std::string::npos)
+                            continue;
+
+                        auto ipv4 = IPv4::toIPv4(line.substr(0, tabPos));
+                        if (ipv4) addresses.insert(*ipv4);
+                    }
+
+                    return;
                 }
-
-                return;
             }
         }
 

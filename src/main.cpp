@@ -2,7 +2,7 @@
 #include <io.h>
 
 int main(int, char**) {
-    filter::IO io(filter::inputType::file);
+    filter::IO io(filter::inputType::standard);
     std::multiset<filter::IPv4, std::greater<filter::IPv4>> addresses;
 
     io.in(addresses);
