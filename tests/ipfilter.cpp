@@ -4,16 +4,18 @@
 #include <io.h>
 
 TEST(IpFilter, md5sum_check_linux) {
-    [[nodiscard]] std::system("cat ip_filter.tsv | ./ip_filter | md5sum > ip_filter_md5sum_check_l.txt");
+    const char* command = "cat ip_filter.tsv | ./ip_filter | md5sum > md5sum_check_l.txt";
+    int returnSystemValue = std::system(command);
     std::ifstream istream;
     std::string checkLine;
 
-    istream.open("ip_filter_md5sum_check_l.txt");
+    istream.open("md5sum_check_l.txt");
     if (!istream.is_open()) 
         FAIL();
 
     std::getline(istream, checkLine);
 
+    EXPECT_EQ(returnSystemValue, 0);
     EXPECT_EQ(checkLine, "24e7a7b2270daee89c64d3ca5fb3da1a  -");
 }
 
